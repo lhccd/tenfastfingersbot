@@ -1,4 +1,4 @@
-import os, datetime, time
+import os, datetime, time, pyautogui
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.action_chains import ActionChains
@@ -25,6 +25,7 @@ print_start()
 #driver.get('https://10fastfingers.com/typing-test/german')
 
 while True:
+    pyautogui.click(500,500)
     driver.get('https://www.ub.tum.de/en/reserve-study-desks')
     body = driver.find_element_by_css_selector('body')
     body.click()
@@ -55,6 +56,9 @@ while True:
         print("reservation link", reservationLink.get_attribute('href'))
         driver.get(reservationLink.get_attribute('href'))
         time.sleep(3)
+        body = driver.find_element_by_css_selector('body')
+        body.click()
+        body.send_keys(Keys.PAGE_DOWN)
         nameInput = driver.find_element_by_css_selector('#edit-field-tn-name-und-0-value')
         nameInput.send_keys(userDetails['name'])
         emailInput = driver.find_element_by_css_selector('#edit-anon-mail.form-text')
@@ -68,7 +72,9 @@ while True:
         sndCheckBox = driver.find_element_by_css_selector('#edit-field-datenschutzerklaerung > div > label')
         ActionChains(driver).move_to_element(sndCheckBox).move_by_offset((-40), (0)).click().perform()
         time.sleep(3)
-        driver.find_element_by_css_selector('#edit-submit').click()
+        submitButton = driver.find_element_by_css_selector('#edit-submit').click()
+        ActionChains(driver).move_to_element(submitButton).perform()
+        submitButton.click()
         print("is Reservation Confirmation in page source? ", ('Reservation Confirmation' in driver.page_source))
         if 'Reservation Confirmation' in driver.page_source:
             print("RESERVATION SUCCESSFUL")
