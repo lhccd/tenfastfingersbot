@@ -32,8 +32,10 @@ while True:
     body.send_keys(Keys.PAGE_DOWN)
     body.send_keys(Keys.PAGE_DOWN)
     x = datetime.date.today() + datetime.timedelta(days=1)
+    xx = datetime.date.today() + datetime.timedelta(days=2)
     tomorrowsDate = str((x.strftime('%d. ') + x.strftime('%B %Y')))
-    print("Set Tomorrow Date", tomorrowsDate)
+    dayAfterTomorrowDate = str((xx.strftime('%d. ') + xx.strftime('%B %Y')))
+    print("Set Tomorrow Date", tomorrowsDate, "and DayAfterTomorrow Date", dayAfterTomorrowDate)
     time.sleep(3)
     try:
         pageDate = driver.find_element_by_css_selector('table > tbody > tr.odd.views-row-first > td.views-field.views-field-field-tag > span').text
@@ -43,12 +45,16 @@ while True:
             '#block-system-main > div > div > div.view-content > table > tbody > tr')
         for row in allrows:
             print(row.text)
-            if tomorrowsDate in row.text and "Main Campus" in row.text:
+            if tomorrowsDate in row.text and "Main Campus" in row.text or dayAfterTomorrowDate in row.text and "Main Campus" in row.text:
+                print("MATCH FOUND! Tomorrows Date", tomorrowsDate, "found in current row", row.text)
                 reservationLink = row
                 ActionChains(driver).move_to_element(reservationLink).perform()
                 reservationLink = reservationLink.find_element_by_css_selector('a')
                 print(reservationLink)
                 break
+            else:
+                print("NO match was found")
+
         #reservationLink = driver.find_element_by_css_selector('table > tbody > tr.odd.views-row-first > td.views-field.views-field-views-conditional.internlink > a')
         #reservationLink = driver.find_element_by_css_selector('#block-system-main > div > div > div.view-content > table > tbody > tr:nth-child(1) > td.views-field.views-field-views-conditional.internlink > a')
         #ActionChains(driver).move_to_element(reservationLink).perform()
